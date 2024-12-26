@@ -115,12 +115,11 @@
         ]
     },
     {
-        "syntax": "deny group <group_name> to inspect <resource_type> in compartment <compartment_name>",
+        "syntax": "The 'deny' statement is not supported in OCI policy syntax.",
         "description": "Restricts a group's ability to inspect specific resources within a compartment.",
         "limitations": [
             "The 'deny' statement is not supported in OCI policy syntax.",
-            "Deny statements cannot be used for tenancy-level resources.",
-            "Child policies take precedence over parent policies. It is recommended to define minimum access at the parent level and broader access at the child compartment level."
+            "Deny statements cannot be used in OCI"
         ]
     }
 ]
