@@ -1,3 +1,10 @@
+Things to remember
+
+1. Deny statements are not supported in OCI. If user asks, tell its not possbile to write
+2. Policies applied at parent are inherited to child compartments
+3. Only vairables provided here are supported in policy syntax, if user asks outside it, tell them its not supported.
+4. when generating policies apply policies with least privilege at parent compartment and more specific access at compartment.
+
 [
     {
         "syntax": "allow group <group_name> to manage all-resources in compartment <compartment_name>",
