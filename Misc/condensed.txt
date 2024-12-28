@@ -1,0 +1,52 @@
+## Condensed Information for OCI Tag-Based Policy Generation
+
+**Key Concepts**
+
+* **Tag-Based Access Control:** Access is granted based on tags applied to user groups and compartments.
+* **Policy Structure:**
+    * Syntax: `allow any-user to <action> <resource> in tenancy where <conditions>`	
+    * Use tags to match requestor (user group) and target (compartment).
+* **Supported Actions:** `inspect`, `read`, `use`, `manage`.
+* **Policy Inheritance:** Policies applied at the parent compartment are inherited by child compartments.
+* **Deny Statements:**  OCI does not support explicit deny statements.
+
+* **Compartment Hierarchy in Policies:** In a tenancy with a structure like `root -> compa -> compb -> compc`, the compartment syntax in policies is `compa:compb:compc`.
+
+**Supported Tag Variables**
+
+* **Requesting Resource (Principal):**
+    * User Group or Dynamic Group: `request.principal.group.tag.<tagNamespace>.<tagKey> = '<value>'`
+* **Target Resource:**
+    * Compartment: `target.resource.compartment.tag.<tagNamespace>.<tagKey> = '<value>'`
+
+**Important Notes**
+
+* Define least privilege at higher levels (e.g., tenancy) and more specific privileges in compartments.
+* When generating policies, apply policies with least privilege at the parent compartment and more specific access at the compartment level.
+* When writing tag-based policies, always apply them at the tenancy level unless specifically requested to apply them at the compartment level.
+
+
+**Example Policy**
+
+When comparing tags to grant access, use any-user instead of group unless the user explicitly asks for it.
+
+allow any-user to manage instances in compartment ProjectA
+where request.principal.group.tag.Project.Team = 'Alpha' 
+  and target.resource.compartment.tag.Project.Environment = 'Development'
+
+when there are multiple conditions in where use "all" to make sure all conditions are true or "any" to make sure just any 1 condition is true. Here is an example 
+
+Allow group GroupAdmins to manage groups in tenancy where all {target.group.name=/A-*/,target.group.name!='A-Admins'}
+
+Allow group GroupAdmins to manage groups in tenancy where any {target.group.name=/A-*/,target.group.name!='A-Admins'}
+
+
+
+Additional Considerations
+
+If there are multiple groups requesting the same access, you can write the policy like this:
+
+allow group Developers, devops, opssupportgroup to manage instances in compartment ProjectA 
+where request.principal.group.tag.Project.Team = 'Alpha'
+
+When specifying resources, you can use specific resources like instances, buckets, etc., or use all-resources for broad access.

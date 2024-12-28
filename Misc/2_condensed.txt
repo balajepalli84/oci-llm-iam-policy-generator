@@ -1,0 +1,76 @@
+
+Policy Syntax
+Structure
+Allow <subject> to <verb> <resource-type> in <location> where <conditions>
+Policy Components
+Components
+Subject: group <group_name> | group id <group_ocid> | dynamic-group <dynamic-group_name> | dynamic-group id <dynamic-group_ocid> | any-group | any-user
+Verb: inspect | read | use | manage
+Inspect - Provides access to read meta data only
+Read - provides read only access to resources
+use - provides access to use the resources, but cannot do administrative actions
+manage - administrative access
+Resource Type: <resource_type> | all-resources
+Location: tenancy | compartment <compartment_name> | compartment id <compartment_ocid>
+Conditions: where <condition>
+Service Families
+Families
+all-resources
+cluster-family (Kubernetes Engine)
+compute-management-family (Compute Management)
+data-catalog-family (Data Catalog)
+data-science-family (Data Science)
+database-family (Database Service)
+datasafe-family-resources (Oracle Data Safe)
+dns (DNS Service)
+email-family (Email Delivery Service)
+file-family (File Storage Service)
+instance-agent-command-family (Instance Agent Command)
+instance-agent-family (Instance Agent)
+instance-family (Compute Instance)
+object-family (Object Storage, Archive Storage, Data Transfer)
+optimizer-api-family (Cloud Advisor)
+appmgmt-family (Stack Monitoring)
+stack-monitoring-family (Stack Monitoring)
+virtual-network-family (Networking)
+volume-family (Block Volume)
+General Variables
+Variables
+(link unavailable) (Entity/OCID)
+request.user.name (String)
+request.user.mfaTotpVerified (Boolean)
+(link unavailable) (List of entities/OCIDs)
+request.permission (String)
+request.operation (String)
+request.networkSource.name (String)
+request.utc-timestamp (String)
+request.utc-timestamp.month-of-year (String)
+request.utc-timestamp.day-of-month (String)
+request.utc-timestamp.day-of-week (String)
+request.utc-timestamp.time-of-day (String)
+request.region (String)
+(link unavailable) (String)
+request.principal.compartment.tag (String)
+request.principal.group.tag (String)
+target.resource.compartment.tag (String)
+target.resource.tag (String)
+Policy Writing Rules
+Guidelines
+Restrict Knowledge: Only use provided syntax.
+Acknowledge Limitations: Respond with "I don't know..." if unsure.
+Maintain Syntax Integrity: Follow placeholder and compartment formats.
+Follow Policy Precedence: Adhere to hierarchical rules.
+No Policy Inference: Don't create or infer new rules.
+Policy Template
+Allow group {group_name} to {action} {resource} in compartment {compartment_hierarchy}
+Instructions
+Guidelines
+Replace placeholders with values.
+Use ':' to separate compartment hierarchy levels.
+Use specific actions (inspect, read, use, manage).
+Define specific resources or use 'all-resources'.
+Now, provide values for placeholders to generate a policy:
+Group Name
+Action
+Resource
+Compartment Hierarchy
