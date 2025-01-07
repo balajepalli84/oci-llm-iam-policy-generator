@@ -1,0 +1,270 @@
+{
+  "oci_policies": {
+	"overview": {
+		"category": "Overview of Policies",
+		"content": {
+		  "definition": "A policy is a document that specifies who can access which Oracle Cloud Infrastructure resources and how.",
+		  "key_elements": [
+			"Allows a group to work in certain ways with specific types of resources in a particular compartment.",
+			"Policies only allow access; they cannot deny it (implicit deny by default)."
+		  ],
+		  "steps_to_create_policies": [
+			"Define users, groups, and one or more compartments to hold the cloud resources for your organization.",
+			"Create one or more policies written in the policy language.",
+			"Place users into appropriate groups depending on the compartments and resources they need to work with.",
+			"Provide users with one-time passwords to access the Console."
+		  ]
+		}
+    },
+	"syntax": {
+      "structure": "Allow <subject> to <verb> <resource-type> in <location> where <conditions>",
+      "components": {
+        "subject": {
+          "description": "Specifies one or more groups by name or OCID, or 'any-user' to cover all users, instance principals, and resource principals in the tenancy.",
+          "examples": [
+            "group A-Admins",
+            "group id ocid1.group.oc1..exampleuniqueID",
+            "any-user"
+          ]
+        },
+        "verb": {
+          "description": "Defines the level of access. Common verbs include 'inspect', 'read', 'use', and 'manage'.",
+          "examples": [
+            "inspect",
+            "read",
+            "use",
+            "manage"
+          ]
+        },
+        "resource_type": {
+          "description": "Specifies the type of resource, such as individual resources (e.g., 'instances') or families of resources (e.g., 'instance-family').",
+          "examples": [
+            "instances",
+            "instance-family",
+            "all-resources"
+          ]
+        },
+        "location": {
+          "description": "Indicates the compartment or tenancy where the policy applies. If its a child compartment provide hirerachy as CompartmentA:Project-A where CompartmentA is under root",
+          "examples": [
+            "in compartment Project-A",
+			"in compartment CompartmentA:Project-A",
+            "in tenancy"
+          ]
+        },
+        "conditions": {
+          "description": "Optional constraints to further refine the policy, such as time-based conditions, specific request attributes, or tag-based conditions.",
+          "examples": [
+            "where request.user.mfaTotpVerified='true'",
+            "where request.region='us-ashburn-1'",
+            "where target.resource.tag.Operations.Project='Prod'"
+          ]
+        }
+      }
+    },
+    "verbs": {
+      "inspect": {
+        "description": "Ability to list resources without access to confidential information or user-specified metadata.",
+        "target_user": "Third-party auditors"
+      },
+      "read": {
+        "description": "Includes 'inspect' plus the ability to get user-specified metadata and the actual resource itself.",
+        "target_user": "Internal auditors"
+      },
+      "use": {
+        "description": "Includes 'read' plus the ability to work with existing resources, typically excluding creation or deletion.",
+        "target_user": "Day-to-day end users of resources"
+      },
+      "manage": {
+        "description": "Includes all permissions for the resource, encompassing creation, deletion, and modification.",
+        "target_user": "Administrators"
+      }
+    },
+    "resource_types": {
+      "all-resources": {
+        "description": "All Oracle Cloud Infrastructure resource types."
+      },
+      "virtual-network-family": {
+        "description": "Includes resources related to virtual cloud networks (VCNs), such as subnets, route tables, and security lists.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "instance-family": {
+        "description": "Encompasses compute instances and related resources.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "volume-family": {
+        "description": "Pertains to block storage volumes and their backups.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "database-family": {
+        "description": "Covers resources related to database services, including DB systems, DB nodes, and databases.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/Reference/dbsystempolicyreference.htm"
+      },
+      "object-family": {
+        "description": "Includes Object Storage, Archive Storage, and Data Transfer resources.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "dns": {
+        "description": "Pertains to Domain Name System (DNS) services.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "email-family": {
+        "description": "Includes resources related to the Email Delivery service.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "file-family": {
+        "description": "Covers resources for the File Storage service.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "data-catalog-family": {
+        "description": "Encompasses resources for the Data Catalog service.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "data-science-family": {
+        "description": "Includes resources for the Data Science service.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "compute-management-family": {
+        "description": "Covers resources for managing compute instances, such as instance configurations and pools.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/Reference/corepolicyreference.htm"
+      },
+      "instance-agent-family": {
+        "description": "Pertains to instance agent plugins and related resources.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/Reference/corepolicyreference.htm"
+      },
+      "instance-agent-command-family": {
+        "description": "Includes resources for instance agent commands.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/Reference/corepolicyreference.htm"
+      },
+      "cluster-family": {
+        "description": "Relates to Kubernetes clusters and associated resources.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "optimizer-api-family": {
+        "description": "Covers resources for Cloud Advisor services.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },
+      "appmgmt-family": {
+        "description": "Includes resources for Stack Monitoring services.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      },    
+
+      "stack-monitoring-family": {
+        "description": "Pertains to resources for Stack Monitoring.",
+        "details_url": "https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference_topic-ResourceTypes.htm"
+      }
+    },
+    "tag_based_policy": {
+      "description": "Policies that use tags to control access to resources.",
+      "syntax_variations": [
+        {
+          "description": "Managing Access Using Tags Applied to the Requesting Resource",
+          "syntax": "Allow any-user to <verb> <resource-type> in <location> where request.principal.group.tag.{tagNamespace}.{tagKeyDefinition} = '<value>'"
+        },
+        {
+          "description": "Unified Policy that Matches Requesting Resource and Target Resource Tags to Control Access to Resources",
+          "syntax": "Allow any-user to <verb> <resource-type> in tenancy where request.principal.group.tag.{tagNamespace}.{tagKeyDefinition} = target.resource.tag.<tag-namespace>.<tag-key>"
+        },
+        {
+          "description": "Managing Access Using Tags Applied to the Target Resource",
+          "syntax": "Allow <subject> to <verb> <resource-type> where target.resource.tag.<tag-namespace>.<tag-key> = '<tag-value>'"
+        }
+      ],
+      "examples": [
+        {
+          "name": "Allow access to resources with a specific tag",
+          "policy_statement": "Allow group TagAdmins to manage all-resources where target.resource.tag.Department = 'Finance'",
+          "description": "This policy allows the group 'TagAdmins' to manage all resources tagged with 'Department=Finance'."
+        },
+        {
+          "name": "Allow inspection of resources tagged with 'Environment=Dev'",
+          "policy_statement": "Allow group DevOps to inspect all-resources where target.resource.tag.Environment = 'Dev'",
+          "description": "This policy permits the group 'DevOps' to inspect resources with the 'Environment=Dev' tag."
+        },
+        {
+          "name": "Restrict access based on custom project tags",
+          "policy_statement": "Allow group ProjectManagers to read all-resources where target.resource.tag.Project = 'Alpha'",
+          "description": "This policy grants the 'ProjectManagers' group read-only access to resources tagged with 'Project=Alpha'."
+        }
+      ],
+      "notes": [
+        "Tag-based policies apply only to resources that support tagging.",
+        "Tags must exist on the target resource to be evaluated in a policy."
+      ]
+    },
+    "general_variables": {
+      "request": {
+        "description": "Provides access to attributes in the request context.",
+        "examples": [
+          "request.region",
+          "request.user.mfaTotpVerified",
+          "request.networkSource.id"
+        ]
+      },
+      "target": {
+        "description": "Provides access to attributes of the target resource.",
+        "examples": [
+          "target.resource.compartment.id",
+          "target.resource.tag['tagNamespaceName.tagKey']",
+          "target.bucket.id"
+        ]
+      },
+      "current_time": {
+        "description": "Represents the current time for time-based conditions.",
+        "examples": [
+          "current_time between '2023-01-01T00:00:00Z' and '2023-12-31T23:59:59Z'"
+        ]
+      },
+      "user": {
+        "description": "Attributes related to the user making the request.",
+        "examples": [
+          "request.user.group",
+          "request.user.ocid",
+          "request.user.mfaTotpVerified"
+        ]
+      }
+    },
+    "policy_hierarchy": {
+      "description": "Policies can be attached at different levels in the compartment hierarchy, affecting the scope of their application.",
+      "details": {
+        "tenancy_level": {
+          "description": "Policies attached at the tenancy level apply to all compartments within the tenancy.",
+          "example": "Allow group NetworkAdmins to manage virtual-network-family in tenancy"
+        },
+        "compartment_level": {
+          "description": "Policies attached at a specific compartment apply only within that compartment.",
+          "example": "Allow group A-Admins to manage all-resources in compartment Project-A"
+        }
+      }
+    },
+    "common_policies": [
+      {
+        "name": "Let network admins manage a cloud network",
+        "description": "Grants the NetworkAdmins group the ability to manage all components in Networking across the tenancy.",
+        "policy_statement": "Allow group NetworkAdmins to manage virtual-network-family in tenancy"
+      },
+      {
+        "name": "Let users launch compute instances",
+        "description": "Allows the InstanceLaunchers group to manage instances and related resources within specified compartments.",
+        "policy_statement": [
+          "Allow group InstanceLaunchers to manage instance-family in compartment ABC",
+          "Allow group InstanceLaunchers to use volume-family in compartment ABC",
+          "Allow group InstanceLaunchers to use virtual-network-family in compartment XYZ"
+        ]
+      }
+    ],
+    "vmware_solution_policies": [
+      {
+        "name": "Manage SDDCs and ESXi hosts",
+        "description": "Enables a specified group to create, manage, or delete SDDCs and ESXi hosts within the tenancy.",
+        "policy_statement": [
+          "Allow group <group_name> to manage sddcs in tenancy",
+          "Allow group <group_name> to manage instances in tenancy",
+          "Allow group <group_name> to manage vcns in tenancy"
+        ]
+      }
+    ]
+  }
+}
+
+ 
