@@ -172,24 +172,45 @@
       ],
       "examples": [
         {
+          "name": "Allow access to any user that match their user group tags with target compartment tags",
+          "policy_statement": "Allow any-user to manage all-resources in Tenancy where request.principal.group.tag.Operations.Project = target.resource.tag.organization.Department",
+          "description": "This policy allows the any group with tag prefix 'Operations' and tag key 'Project' to manage all resources in compartments tagged with tag prefix 'organization' and key value 'Department'"
+        },
+		{
           "name": "Allow access to resources with a specific tag",
-          "policy_statement": "Allow group TagAdmins to manage all-resources where target.resource.tag.Department = 'Finance'",
-          "description": "This policy allows the group 'TagAdmins' to manage all resources tagged with 'Department=Finance'."
+          "policy_statement": "Allow group TagAdmins to manage all-resources in Tenancy where target.resource.tag.organization.Department = 'Finance'",
+          "description": "This policy allows the group 'TagAdmins' to manage all resources tagged with 'organization.Department=Finance'."
         },
         {
           "name": "Allow inspection of resources tagged with 'Environment=Dev'",
-          "policy_statement": "Allow group DevOps to inspect all-resources where target.resource.tag.Environment = 'Dev'",
-          "description": "This policy permits the group 'DevOps' to inspect resources with the 'Environment=Dev' tag."
+          "policy_statement": "Allow group DevOps to inspect all-resources in Tenancy where target.resource.tag.project.Environment = 'Dev'",
+          "description": "This policy permits the group 'DevOps' to inspect resources with the 'project.Environment=Dev' tag."
         },
         {
           "name": "Restrict access based on custom project tags",
-          "policy_statement": "Allow group ProjectManagers to read all-resources where target.resource.tag.Project = 'Alpha'",
-          "description": "This policy grants the 'ProjectManagers' group read-only access to resources tagged with 'Project=Alpha'."
+          "policy_statement": "Allow group ProjectManagers to read all-resources in Tenancy where target.resource.tag.organization.Project = 'Alpha'",
+          "description": "This policy grants the 'ProjectManagers' group read-only access to resources tagged with 'organization.Project=Alpha'."
+        },
+		{
+          "name": "The tags applied to the groups that the user belongs to are evaluated for a match.",
+          "policy_statement": "allow any-user to manage instances in compartment HR where request.principal.group.tag.Operations.Project= 'Prod'",
+          "description": "Any user who belongs to a group that has been tagged with Operations.Project='Prod' can manage instances in the HR compartment."
+        },
+		{
+          "name": "The tags applied to the dynamic groups that the instance belongs to are evaluated for a match",
+          "policy_statement": "allow dynamic-group InstancesA to manage instances in compartment HR where request.principal.group.tag.Operations.Project= 'Prod'",
+          "description": "Instances that are members of the dynamic group InstancesA and that are also members of a dynamic group tagged with Operations.Project='Prod' can manage instances in the compartment HR."
+        },
+		{
+          "name": "The tags applied to the tenancy that the requesting resource belongs to are evaluated.",
+          "policy_statement": "allow group computeAdmins to manage instances in tenancy where request.principal.compartment.tag.Operations.Project= 'Prod'",
+          "description": "Users that are part of computeAdmins group have manage access to instance where compartment is tagged with Operations.Project= 'Prod'"
         }
       ],
       "notes": [
         "Tag-based policies apply only to resources that support tagging.",
-        "Tags must exist on the target resource to be evaluated in a policy."
+        "Tags must exist on the target resource to be evaluated in a policy.",
+		"Users reside in the root compartment of your tenancy, so tags must be applied to the root compartment for those policy statements to work."
       ]
     },
     "general_variables": {
